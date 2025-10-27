@@ -53,7 +53,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Clean up the listener when the component unmounts
     return unsubscribe;
   }, []); // Empty array ensures this runs only once
-
   // Auth functions
   function signUp(email: string, pass: string) {
     return createUserWithEmailAndPassword(auth, email, pass);
