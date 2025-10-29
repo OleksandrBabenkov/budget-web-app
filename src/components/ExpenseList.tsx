@@ -13,6 +13,10 @@ import {
 import { useAuth } from '../contexts/AuthContext'; // Your custom hook
 import { Trash2, Edit } from 'lucide-react'; // Using icons from your stack
 
+interface ExpenseListProps {
+  onEditExpense: (id: string) => void; // Function to call when edit is clicked
+}
+
 // --- Design System Placeholders ---
 // Using placeholder components as before.
 // Replace these with your actual pre-built components.
@@ -44,7 +48,7 @@ export interface Expense {
   comment: string;
 }
 
-export const ExpenseList = () => {
+export const ExpenseList = ({ onEditExpense }: ExpenseListProps) => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -99,10 +103,10 @@ export const ExpenseList = () => {
     return () => unsubscribe();
   }, [user]); // Re-run this effect if the user changes
 
-  // --- Placeholder Functions for CRUD ---
+
   const handleEdit = (id: string) => {
-    console.log('Edit expense:', id);
-    // Future: Open a modal with ExpenseForm pre-filled with this data
+    // Just tell the parent component we want to edit this ID
+    onEditExpense(id);
   };
 
   const handleDelete = async (id: string) => {
@@ -179,8 +183,9 @@ export const ExpenseList = () => {
             </div>
             <div className="ml-4 flex-shrink-0 flex items-center">
               <IconButton
-                onClick={() => handleEdit(expense.id)}
+                onClick={() => handleEdit(expense.id)} // <-- Updated
                 aria-label="Edit expense"
+                disabled={deletingId === expense.id}
               >
                 <Edit size={18} />
               </IconButton>

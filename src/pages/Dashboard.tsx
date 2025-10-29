@@ -2,33 +2,73 @@
 import { Layout } from '../components/Layout';
 import { ExpenseForm } from '../components/ExpenseForm';
 import { ExpenseList } from '../components/ExpenseList';
+import { useState } from 'react';
+import { Modal } from '../components/Modal';
+import { Button } from '../components/Button';
 
 export function Dashboard() {
+  
+  const [editingExpenseId, setEditingExpenseId] = useState<string | null>(null);
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+
+ 
+const handleShowAddForm = () => {
+    setEditingExpenseId(null); // Ensure we're in "create" mode
+    setIsFormModalOpen(true);
+  };
+
+  // Opens the modal for *editing* an existing expense
+  // This will be passed to ExpenseList
+  const handleShowEditForm = (id: string) => {
+    setEditingExpenseId(id); // Set the ID to edit
+    setIsFormModalOpen(true);
+  };
+
+  // Closes the modal and resets the form state
+  const handleCloseForm = () => {
+    setIsFormModalOpen(false);
+    setEditingExpenseId(null);
+  };
+
   return (
     <Layout>
-      {/* This grid layout is a common dashboard pattern.
-        Your template's Tailwind config is ready for 'lg:col-span-2'
-      */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Main Content Area (span 2 cols on large screens) */}
+        {/* Main Content Area (now just the list) */}
         <div className="space-y-6 lg:col-span-2">
-          {/* Placeholder for Phase 2: Create (ExpenseForm) */}
-          <div className="rounded-lg bg-white p-6 shadow-sm">
-            <ExpenseForm/>
+          
+          {/* Button to trigger the modal */}
+          <div className="flex justify-end">
+            <Button onClick={handleShowAddForm}>
+              Add New Expense
+            </Button>
           </div>
 
-          {/* Placeholder for Phase 2: Read (ExpenseList) */}
+          {/* The list is now the main view */}
           <div className="rounded-lg bg-white p-6 shadow-sm">
-            <ExpenseList/>
+            <ExpenseList 
+              onEditExpense={handleShowEditForm}
+            />
           </div>
         </div>
 
-        {/* Sidebar/Info Area (span 1 col on large screens) */}
+        {/* Sidebar/Info Area (No change) */}
         <div className="rounded-lg bg-white p-6 shadow-sm lg:col-span-1">
           <h2 className="text-lg font-semibold text-neutral-800">Summary</h2>
           <p className="mt-2 text-neutral-600">(Stats summary will go here)</p>
         </div>
       </div>
+
+      {/* --- The Modal for the Form --- */}
+      <Modal
+        isOpen={isFormModalOpen}
+        onClose={handleCloseForm}
+        title={editingExpenseId ? 'Update Expense' : 'Add New Expense'}
+      >
+        <ExpenseForm
+          editingExpenseId={editingExpenseId}
+          onDone={handleCloseForm} // Pass the close fn to the form
+        />
+      </Modal>
     </Layout>
   );
 }
