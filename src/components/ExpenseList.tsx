@@ -111,9 +111,9 @@ export const ExpenseList = ({ onEditExpense }: ExpenseListProps) => {
 
   const handleDelete = async (id: string) => {
       // Basic confirmation
-      if (!window.confirm('Are you sure you want to delete this expense?')) {
-        return;
-      }
+      // if (!window.confirm('Are you sure you want to delete this expense?')) {
+      //   return;
+      // }
 
       setDeletingId(id); // Disable the button
       

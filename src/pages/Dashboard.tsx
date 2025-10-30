@@ -5,6 +5,7 @@ import { ExpenseList } from '../components/ExpenseList';
 import { useState } from 'react';
 import { Modal } from '../components/Modal';
 import { Button } from '../components/Button';
+import { ExpenseSummary } from '../components/ExpenseSummary';
 
 export function Dashboard() {
   
@@ -51,10 +52,9 @@ const handleShowAddForm = () => {
           </div>
         </div>
 
-        {/* Sidebar/Info Area (No change) */}
+        {/* --- Sidebar/Info Area: CHANGED --- */}
         <div className="rounded-lg bg-white p-6 shadow-sm lg:col-span-1">
-          <h2 className="text-lg font-semibold text-neutral-800">Summary</h2>
-          <p className="mt-2 text-neutral-600">(Stats summary will go here)</p>
+          <ExpenseSummary /> 
         </div>
       </div>
 

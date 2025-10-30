@@ -1,25 +1,41 @@
 // src/pages/Stats.tsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Layout } from '../components/Layout';
 import { useAuth } from '../contexts/AuthContext'; //
 import { db } from '../firebaseConfig';
 import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
-import { Bar } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
+// import {
+//   Chart as ChartJS,
+//   CategoryScale,
+//   LinearScale,
+//   BarElement,
+//   Title,
+//   Tooltip,
+//   Legend,
+// } from 'chart.js';
+
 import {
   Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js';
 
+
 // --- Register the components Chart.js needs ---
+// ChartJS.register(
+//   CategoryScale,
+//   LinearScale,
+//   BarElement,
+//   Title,
+//   Tooltip,
+//   Legend
+// );
+
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend
@@ -39,7 +55,9 @@ interface ChartData {
   datasets: {
     label: string;
     data: number[];
-    backgroundColor: string;
+    backgroundColor: string[];
+    borderColor: string;
+    borderWidth: number;
   }[];
 }
 
@@ -88,13 +106,30 @@ export function Stats() {
         const labels = Object.keys(expensesByCategory);
         const data = Object.values(expensesByCategory);
 
+        const basicColors = [
+          '#FF6384', // Red
+          '#36A2EB', // Blue
+          '#FFCE56', // Yellow
+          '#4BC0C0', // Teal
+          '#9966FF', // Purple
+          '#FF9F40', // Orange
+          '#C9CBCF', // Grey
+        ];
+
+        const backgroundColors = [];
+        for (let i = 0; i < data.length; i++) {
+          backgroundColors.push(basicColors[i % basicColors.length]);
+        }
+
         setChartData({
           labels,
           datasets: [
             {
-              label: 'Total Expenses by Category',
+              label: 'Expenses by Category', // This is often shown in the tooltip
               data,
-              backgroundColor: 'rgba(54, 162, 235, 0.6)', // Example color
+              backgroundColor: backgroundColors, // <-- CHANGED
+              borderColor: '#FFFFFF', // Adds a white border between segments
+              borderWidth: 2,
             },
           ],
         });
@@ -113,14 +148,27 @@ export function Stats() {
   // --- Chart Options ---
   const options = {
     responsive: true,
+    maintainAspectRatio: false, // Allows our container to control the size
     plugins: {
       legend: {
         position: 'top' as const,
       },
       title: {
         display: true,
-        text: 'Your Spending Summary',
+        text: 'Your Spending Summary by Category',
       },
+      tooltip: {
+        callbacks: {
+          label: function(context: any) {
+            // Format tooltip to show percentage
+            const label = context.label || '';
+            const value = context.parsed || 0;
+            const total = context.chart.getDatasetMeta(0).total || 1;
+            const percentage = ((value / total) * 100).toFixed(2);
+            return `${label}: $${value.toFixed(2)} (${percentage}%)`;
+          }
+        }
+      }
     },
   };
 
@@ -135,7 +183,7 @@ export function Stats() {
     if (!chartData || chartData.datasets[0].data.length === 0) {
       return <div>You have no expense data to display.</div>;
     }
-    return <Bar options={options} data={chartData} />;
+    return <Pie options={options} data={chartData} />;
   };
 
   return (
@@ -144,8 +192,7 @@ export function Stats() {
         <h2 className="text-lg font-semibold text-neutral-800 mb-4">
           Expense Visualization
         </h2>
-        <div className="relative h-96">
-          {/* Chart.js needs a relatively positioned container */}
+        <div className="relative mx-auto w-full max-w-md h-96">
           {renderContent()}
         </div>
       </div>

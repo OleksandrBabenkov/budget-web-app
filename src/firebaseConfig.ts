@@ -2,13 +2,13 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-// import { enablePersistence } from "firebase/firestore";
+import {
+  initializeFirestore, // <-- 1. Import this instead of getFirestore
+  persistentLocalCache, // <-- 2. Import the persistence-enabled cache
+  persistentSingleTabManager, // <-- 3. Import the tab manager
+} from 'firebase/firestore';
 
-// enablePersistence(db)
-//   .catch((err) => console.log("Firebase persistence error: ", err));
-// 1. Read the environment variables from Vite
-// Vite exposes .env variables on the `import.meta.env` object
+
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -24,10 +24,13 @@ const app = initializeApp(firebaseConfig);
 // 3. Initialize and export Firebase services
 // This is a best practice so you can import them from one place
 export const auth = getAuth(app);
-export const db = getFirestore(app);
-// export const storage = getStorage(app);
-// export const analytics = getAnalytics(app);
-
+export const db = initializeFirestore(app, {
+  // Use the persistent cache
+  localCache: persistentLocalCache({
+    // Use this tab manager to handle the 'failed-precondition' error
+    tabManager: persistentSingleTabManager({}),
+  }),
+});
 
 // 4. Export the initialized app (optional, but useful)
 export default app;
