@@ -1,4 +1,6 @@
-import React from 'react';
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
 
 // This is the official Google "G" logo as an SVG
 export function GoogleLogo() {
