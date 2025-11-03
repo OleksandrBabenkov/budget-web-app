@@ -1,3 +1,7 @@
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
+
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebaseConfig';
 import {

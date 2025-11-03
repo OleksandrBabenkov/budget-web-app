@@ -1,3 +1,7 @@
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
+
 // src/components/ProtectedRoute.tsx
 import React from 'react';
 import { Navigate } from 'react-router-dom';

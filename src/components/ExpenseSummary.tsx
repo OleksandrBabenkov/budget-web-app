@@ -1,3 +1,7 @@
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
+
 // src/components/ExpenseSummary.tsx
 import { useState, useEffect } from 'react';
 import { db } from '../firebaseConfig';

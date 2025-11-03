@@ -1,3 +1,7 @@
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
+
 // src/firebaseConfig.ts
 
 import { initializeApp } from "firebase/app";

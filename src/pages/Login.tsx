@@ -1,3 +1,7 @@
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
+
 // src/pages/Login.tsx
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';

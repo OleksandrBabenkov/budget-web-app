@@ -1,3 +1,7 @@
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
+
 // src/components/Modal.tsx
 import React from 'react';
 import { X } from 'lucide-react'; // Import the icon

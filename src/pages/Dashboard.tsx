@@ -1,3 +1,7 @@
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
+
 // src/pages/Dashboard.tsx
 import { Layout } from '../components/Layout';
 import { ExpenseForm } from '../components/ExpenseForm';

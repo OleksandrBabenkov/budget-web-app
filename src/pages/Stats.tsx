@@ -1,3 +1,7 @@
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
+
 // src/pages/Stats.tsx
 import { useState, useEffect } from 'react';
 import { Layout } from '../components/Layout';

@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
 // src/styles/theme.ts
 
 // 1. Your core color palette

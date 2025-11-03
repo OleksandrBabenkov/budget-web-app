@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
 // src/main.tsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';

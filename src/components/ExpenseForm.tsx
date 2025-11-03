@@ -1,3 +1,7 @@
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
+
 import React, { useState } from 'react';
 import type { FormEvent } from 'react';
 import { db } from '../firebaseConfig'; // Import your configured db instance

@@ -1,3 +1,7 @@
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
+
 // src/components/Button.tsx
 import React from 'react';
 import clsx from 'clsx'; // Import clsx

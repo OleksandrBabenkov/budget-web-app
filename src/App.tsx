@@ -1,3 +1,7 @@
+// Copyright (c) 2025 Oleksandr Babenkov
+// All Rights Reserved
+
+
 // src/App.tsx
 import { Routes, Route } from 'react-router-dom';
 import { Login } from './pages/Login';
