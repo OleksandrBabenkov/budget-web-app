@@ -6,12 +6,14 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { GoogleLogo } from '../components/GoogleLogo'; // Adjust path as needed
+import { useEffect } from 'react';
 
 export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { logIn } = useAuth();
+  const { user, logIn, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -24,6 +26,22 @@ export function Login() {
     } catch (err) {
       setError('Failed to log in. Check your email and password.');
       console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    // If the user object exists (is not null), they are logged in.
+    if (user) {
+      navigate('/'); // Redirect to the dashboard
+    }
+  }, [user, navigate]);
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      // Navigate to dashboard (or AuthContext will handle it)
+    } catch (error) {
+      console.error("Failed to sign in with Google", error);
     }
   };
 
@@ -80,6 +98,28 @@ export function Login() {
             Sign Up
           </Link>
         </p>
+
+        <div className="w-full max-w-sm mx-auto p-4">
+          {/* ... your other form elements (email/password) ... */}
+          
+          <button
+            onClick={handleGoogleSignIn}
+            type="button" // Use 'button' to prevent form submission
+            className="
+              flex items-center justify-center w-full px-4 py-2 
+              border border-gray-300 rounded-lg shadow-sm
+              bg-white 
+              text-sm font-medium text-gray-700 
+              hover:bg-gray-50 
+              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+              transition duration-150 ease-in-out
+            "
+          >
+            <GoogleLogo />
+            <span className="ml-3">Sign in with Google</span>
+          </button>
+        </div>
+
       </div>
     </div>
   );

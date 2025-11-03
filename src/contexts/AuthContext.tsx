@@ -15,6 +15,10 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  setPersistence,
+  browserSessionPersistence, // This is the new import
+  GoogleAuthProvider, // <-- 1. Import Google provider
+  signInWithPopup, // <-- 2. Import popup sign-in
 } from 'firebase/auth';
 import type { User, UserCredential } from 'firebase/auth';
 import { auth } from '../firebaseConfig'; // Import your auth service
@@ -26,6 +30,7 @@ interface AuthContextType {
   signUp: (email: string, pass: string) => Promise<UserCredential>;
   logIn: (email: string, pass: string) => Promise<UserCredential>;
   logOut: () => Promise<void>;
+  signInWithGoogle: () => Promise<UserCredential>;
 }
 
 // Create the context
@@ -41,6 +46,8 @@ export function useAuth() {
 interface AuthProviderProps {
   children: ReactNode;
 }
+
+
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
@@ -59,11 +66,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []); // Empty array ensures this runs only once
   // Auth functions
   function signUp(email: string, pass: string) {
-    return createUserWithEmailAndPassword(auth, email, pass);
+    return setPersistence(auth, browserSessionPersistence)
+      .then(() => {
+        return createUserWithEmailAndPassword(auth, email, pass);
+      });
   }
 
   function logIn(email: string, pass: string) {
-    return signInWithEmailAndPassword(auth, email, pass);
+    return setPersistence(auth, browserSessionPersistence)
+      .then(() => {
+        return signInWithEmailAndPassword(auth, email, pass);
+      });
+  }
+
+  function signInWithGoogle() {
+    const provider = new GoogleAuthProvider();
+    // We add setPersistence here too, to honor your "session-only" choice
+    return setPersistence(auth, browserSessionPersistence)
+      .then(() => {
+        return signInWithPopup(auth, provider);
+      });
   }
 
   function logOut() {
@@ -76,6 +98,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     loading,
     signUp,
     logIn,
+    signInWithGoogle,
     logOut,
   };
 
