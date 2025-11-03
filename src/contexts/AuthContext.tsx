@@ -15,8 +15,6 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  setPersistence,
-  browserSessionPersistence, // This is the new import
   GoogleAuthProvider, // <-- 1. Import Google provider
   signInWithPopup, // <-- 2. Import popup sign-in
 } from 'firebase/auth';
@@ -66,26 +64,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []); // Empty array ensures this runs only once
   // Auth functions
   function signUp(email: string, pass: string) {
-    return setPersistence(auth, browserSessionPersistence)
-      .then(() => {
-        return createUserWithEmailAndPassword(auth, email, pass);
-      });
+    return createUserWithEmailAndPassword(auth, email, pass);
   }
 
   function logIn(email: string, pass: string) {
-    return setPersistence(auth, browserSessionPersistence)
-      .then(() => {
-        return signInWithEmailAndPassword(auth, email, pass);
-      });
+    return signInWithEmailAndPassword(auth, email, pass);
   }
 
   function signInWithGoogle() {
     const provider = new GoogleAuthProvider();
-    // We add setPersistence here too, to honor your "session-only" choice
-    return setPersistence(auth, browserSessionPersistence)
-      .then(() => {
-        return signInWithPopup(auth, provider);
-      });
+    return signInWithPopup(auth, provider);
   }
 
   function logOut() {
